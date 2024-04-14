@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Prix pour Prospection Téléphonique</title>
+    <link rel="stylesheet" href="telemarketing_simulator.css"> <!-- Add this line -->
+    <!-- other head elements -->
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Simulateur de Prix pour Prospection Téléphonique</h2>
+
+        <form id="priceCalculator" onsubmit="calculatePrice(); return false;">
+            <fieldset>
+                <legend>Informations sur les appels</legend>
+                <div class="input-group">
+                    <label for="callDuration">Durée moyen d'appel (en minutes):</label>
+                    <input type="number" id="callDuration" value="1" min="0">
+                </div>
+
+                <div class="input-group">
+                    <label for="identifyTargetsDuration">Identifier Cibles (en minutes):</label>
+                    <input type="number" id="identifyTargetsDuration" value="1">
+                </div>
+
+                <div class="input-group">
+                    <label for="writingEmailDuration">Rédiger un mail (en minutes):</label>
+                    <input type="number" id="writingEmailDuration" value="1">
+                </div>
+
+                <div class="input-group">
+                    <label for="crmEntryDuration">Entrée CRM</label>
+                    <input type="number" id="crmEntryDuration" value="1">
+                </div>
+
+            </fieldset>
+
+            <fieldset>
+                <legend>Options supplémentaires</legend>
+                <!-- Champs pour le type de téléphone, suivi des appels, etc. -->
+                <div class="input-group">
+                    <label for="netCallPrice">Prix d'appel Net (par heure):</label>
+                    <input type="number" id="netCallPrice" placeholder="Entrez le prix par heure d'appel net"
+                        value="0.60" min="0" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label for="grossCallPrice">Prix d'appel Brute (par heure):</label>
+                    <input type="number" id="grossCallPrice" placeholder="Entrez le prix par heure d'appel brut"
+                        value="0.60" min="0" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="phoneTracking"> Suivi des appels
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <label for="conversionRate">Ratio d'appels pour un rendez-vous:</label>
+                    <input type="number" id="conversionRate" value="10">
+                </div>
+
+                <div class="input-group">
+                    <label for="phoneDevice">Type de téléphone:</label>
+                    <select id="phoneDevice">
+                        <option value="standard">Standard</option>
+                        <option value="advanced">Avancé</option>
+                    </select>
+                </div>
+                
+            </fieldset>
+
+            <button type="submit">Calculer le Prix</button>
+        </form>
+
+        <h3>Résultats:</h3>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateMaxCallsPerHour() {
+            // Ensure all elements exist
+            var callDurationEl = document.getElementById('callDuration');
+            var crmEntryDurationEl = document.getElementById('crmEntryDuration'); // Ensure this element exists in HTML
+            var identifyTargetsDurationEl = document.getElementById('identifyTargetsDuration');
+            var writingEmailDurationEl = document.getElementById('writingEmailDuration');
+
+            if (!callDurationEl || !crmEntryDurationEl || !identifyTargetsDurationEl || !writingEmailDurationEl) {
+                console.error("Some form elements are missing.");
+                return 0;
+            }
+
+            var callDuration = parseFloat(callDurationEl.value);
+            var crmEntryDuration = parseFloat(crmEntryDurationEl.value); // This value needs to come from an existing form element
+            var identifyTargetsDuration = parseFloat(identifyTargetsDurationEl.value);
+            var writingEmailDuration = parseFloat(writingEmailDurationEl.value);
+
+            var totalTimePerCycle = callDuration + crmEntryDuration + identifyTargetsDuration + writingEmailDuration;
+            var totalTimePerCycleInHours = totalTimePerCycle / 60;
+            var maxCallsPerHour = 1 / totalTimePerCycleInHours;
+
+            return maxCallsPerHour;
+        }
+
+
+        function calculatePrice() {
+            var netCallPrice = parseFloat(document.getElementById('netCallPrice').value);
+            var grossCallPrice = parseFloat(document.getElementById('grossCallPrice').value);
+
+            var maxCalls = calculateMaxCallsPerHour();
+            var maxNetCalls = maxCalls * 0.8;
+            var maxGrossCalls = maxCalls * 0.2;
+
+            var costPerHourNet = maxNetCalls * netCallPrice;
+            var costPerHourGross = maxGrossCalls * grossCallPrice;
+
+            var totalCost = costPerHourNet + costPerHourGross;
+
+            var phoneDevice = document.getElementById('phoneDevice').value;
+            var phoneTracking = document.getElementById('phoneTracking').checked;
+            var conversionRate = parseFloat(document.getElementById('conversionRate').value);
+
+            // Cost based on phone device
+            var phoneDeviceCost = phoneDevice === 'advanced' ? 50 : 30; // Example costs
+
+            // Cost for phone tracking
+            var phoneTrackingCost = phoneTracking ? 20 : 0;
+
+            // Adjust total cost
+            totalCost += phoneDeviceCost + phoneTrackingCost;
+
+            // Ensure conversion rate is not zero to avoid division by zero
+            if (conversionRate <= 0) {
+                document.getElementById('result').innerHTML = "<p>Le ratio d'appels pour un rendez-vous doit être supérieur à 0.</p>";
+                return;
+            }
+
+            // Calculate estimated appointments
+            var estimatedAppointments = maxNetCalls / conversionRate;
+
+            // Construct the result text
+            var resultText = `
+                <h4>Coût total par heure</h4>
+                <p>${totalCost.toFixed(2)} € pour ${maxCalls.toFixed(2)} appels totaux.</p>
+                <h4>Détails</h4>
+                <p>Nombre d'appels nets par heure: ${maxNetCalls.toFixed(2)} (Coût: ${costPerHourNet.toFixed(2)} €)</p>
+                <p>Nombre d'appels bruts par heure: ${maxGrossCalls.toFixed(2)} (Coût: ${costPerHourGross.toFixed(2)} €)</p>
+                <p>Nombre estimé de rendez-vous par heure: ${estimatedAppointments.toFixed(2)}</p>
+            `;
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+
+    </script>
+
+</body>
+
+</html>

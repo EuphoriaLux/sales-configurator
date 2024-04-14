@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulateur d'Objectifs de Vente</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+  
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  
+    .input-group {
+      margin-bottom: 10px;
+    }
+  
+    .input-group label {
+      display: block;
+    }
+  
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Simulateur d'Objectifs de Vente</h2>
+
+  <div class="input-group">
+    <label for="salesTarget">Objectif de Ventes (Nb de lignes):</label>
+    <input type="number" id="salesTarget" placeholder="Entrez l'objectif de ventes annuel">
+  </div>
+  
+  <div class="input-group">
+    <label for="averageLines">Lignes Moyennes par Prospect:</label>
+    <input type="number" id="averageLines" value="2">
+  </div>
+
+  <div class="input-group">
+    <label for="prospectToCustomerRate">Taux de Réussite PROSPECT VERS CLIENT:</label>
+    <input type="number" id="prospectToCustomerRate" value="20" placeholder="Entrez le taux en pourcentage">
+  </div>
+
+  <div class="input-group">
+    <label for="callToAppointmentRate">Taux de Réussite APPEL VERS RENDEZ-VOUS:</label>
+    <input type="number" id="callToAppointmentRate" value="20" placeholder="Entrez le taux en pourcentage">
+  </div>
+
+  <button onclick="calculateTargets()">Calculer les Objectifs</button>
+  
+  <h3>Résultats:</h3>
+  <div id="results"></div>
+</div>
+
+<script>
+function calculateTargets() {
+  var salesTarget = parseFloat(document.getElementById('salesTarget').value);
+  var averageLines = parseFloat(document.getElementById('averageLines').value);
+  var prospectToCustomerRate = parseFloat(document.getElementById('prospectToCustomerRate').value) / 100;
+  var callToAppointmentRate = parseFloat(document.getElementById('callToAppointmentRate').value) / 100;
+
+  // Calculate the required numbers
+  var customersToWin = salesTarget / averageLines;
+  var minimumAppointments = customersToWin / prospectToCustomerRate;
+  var minimumCallsToDo = minimumAppointments / callToAppointmentRate;
+
+  // Display results
+  var resultsHTML = `
+    <p>Clients à Gagner: ${customersToWin.toFixed(2)}</p>
+    <p>Nombre Minimum de Rendez-vous à Avoir: ${minimumAppointments.toFixed(2)}</p>
+    <p>Nombre Minimum d'Appels à Effectuer: ${minimumCallsToDo.toFixed(2)}</p>
+  `;
+  document.getElementById('results').innerHTML = resultsHTML;
+}
+</script>
+
+</body>
+</html>

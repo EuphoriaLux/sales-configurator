@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prospect Convertor Price Configurator</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <section class="calendar">
+            <h2>Select Timeslots</h2>
+            <div class="week">
+                <!-- Simplified repetition for weekdays -->
+                <div class="day" data-day="monday">
+                    <h3>Monday</h3>
+                    <button class="timeslot" data-day="monday" data-special="true" data-timeslot="8-10">8:00 - 10:00</button>
+                    <button class="timeslot" data-day="monday" data-timeslot="10-12">10:00 - 12:00</button>
+                    <button class="timeslot" data-day="monday" data-timeslot="14-16">14:00 - 16:00</button>
+                    <button class="timeslot" data-day="monday" data-timeslot="16-18">16:00 - 18:00</button>
+                </div>
+
+                <div class="day" data-day="mardi">
+                    <h3>Mardi</h3>
+                    <button class="timeslot" data-day="mardi" data-timeslot="8-10">8:00 - 10:00</button>
+                    <button class="timeslot" data-day="mardi" data-special="true" data-timeslot="10-12">10:00 - 12:00</button>
+                    <button class="timeslot" data-day="mardi" data-special="true" data-timeslot="14-16">14:00 - 16:00</button>
+                    <button class="timeslot" data-day="mardi" data-timeslot="16-18">16:00 - 18:00</button>
+                </div>
+
+                <div class="day" data-day="jeudi">
+                    <h3>Jeudi</h3>
+                    <button class="timeslot" data-day="jeudi" data-timeslot="8-10">8:00 - 10:00</button>
+                    <button class="timeslot" data-day="jeudi" data-special="true" data-timeslot="10-12">10:00 - 12:00</button>
+                    <button class="timeslot" data-day="jeudi" data-special="true" data-timeslot="14-16">14:00 - 16:00</button>
+                    <button class="timeslot" data-day="jeudi" data-timeslot="16-18">16:00 - 18:00</button>
+                </div>
+
+                <div class="day" data-day="vendredi">
+                    <h3>Vendredi</h3>
+                    <button class="timeslot" data-day="vendredi" data-timeslot="8-10">8:00 - 10:00</button>
+                    <button class="timeslot" data-day="vendredi" data-timeslot="10-12">10:00 - 12:00</button>
+                    <button class="timeslot" data-day="vendredi" data-timeslot="14-16">14:00 - 16:00</button>
+                    <button class="timeslot" data-day="vendredi" data-special="true" data-timeslot="16-18">16:00 - 18:00</button>
+                </div>
+            </div>
+
+            <h2>Pricing Form</h2>
+            <form id="pricingForm">
+                <div class="form-group">
+                    <label for="pourcentage_lost_call">Pourcentage lost d'appel :</label>
+                    <input type="number" id="pourcentage_lost_call" value="20">
+                </div>    
+                <div class="form-group">
+                    <label for="price_per_call_brut">Price per Call brut:</label>
+                    <input type="number" id="price_call_brut" value="0.30">
+                </div>    
+
+                <div class="form-group">
+                    <label for="price_per_call_net">Price per Call net:</label>
+                    <input type="number" id="price_call_net" value="0.60">
+                </div>   
+            </form>    
+
+        </section>
+
+        <section class="prospect-configurator">
+            <h2>One - Prospect Configurator</h2>
+            <form id="prospectForm">
+                <div class="form-group">
+                    <label for="research_time"><i class="fas fa-search"></i> Research Time (minutes):</label>
+                    <input type="number" id="research_time" placeholder="Research Time" value="5">
+                </div>
+        
+                <div class="form-group">
+                    <label for="create_time"><i class="fas fa-plus-circle"></i> Create Time (minutes):</label>
+                    <input type="number" id="create_time" placeholder="Create Time" value="5">
+                </div>
+        
+                <div class="form-group">
+                    <label for="analysis_time"><i class="fas fa-chart-line"></i> Analysis Time (minutes):</label>
+                    <input type="number" id="analysis_time" placeholder="Analysis Time" value="5">
+                </div>
+        
+                <div class="form-group">
+                    <label for="define_strategy_time"><i class="fas fa-lightbulb"></i> Define Strategy Time (minutes):</label>
+                    <input type="number" id="define_strategy_time" placeholder="Strategy Time" value="5">
+                </div>
+        
+                <div class="form-group">
+                    <label for="first_contact_time"><i class="fas fa-phone"></i> First Contact Time (minutes):</label>
+                    <input type="number" id="first_contact_time" placeholder="First Contact Time" value="5">
+                </div>
+            </form>
+            <h2>Sales Process</h2>
+            <form id="salesprocessForm">
+                <!-- Form Group for Number of Calls -->
+                <!-- Additional input fields within the sales process form for action and conversion metrics -->
+                <div class="form-group">
+                    <label for="action_calls">Calls per Prospect:</label>
+                    <input type="number" id="action_calls" value="3">
+                </div>
+                <div class="form-group">
+                    <label for="action_emails">Emails per Prospect:</label>
+                    <input type="number" id="action_emails" value="3">
+                </div>
+
+                <div class="form-group">
+                    <label for="conversion_appointments">Appointment Conversion Rate (%):</label>
+                    <input type="number" id="conversion_appointments" placeholder="Enter appointment conversion rate" value="10">
+                </div>
+            </form>
+        </section>
+
+        <section class="combinedResults">
+            <h4>Combined Forecast and Calculation Results</h4>
+            <table>
+                <tbody>
+                    <!-- Forecast Details -->
+                    <tr>
+                        <th colspan="2">Forecast Details</th>
+                    </tr>
+                    <tr>
+                        <td>Total Calls Needed:</td>
+                        <td id="forecastTotalCallsNeeded">--</td>
+                    </tr>
+                    <tr>
+                        <td>Total Emails Needed:</td>
+                        <td id="forecastTotalEmailsNeeded">--</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Prospects Possible:</td>
+                        <td id="detailProspectsPossible">--</td>
+                    </tr>
+                    <tr>
+                        <td>Expected Appointments:</td>
+                        <td id="forecastExpectedAppointments">--</td>
+                    </tr>
+                    <!-- Call Income Details -->
+                    <tr>
+                        <th colspan="2">Call Coast Details</th>
+                    </tr>
+                    <tr>
+                        <td>Income from Brut Calls:</td>
+                        <td id="forecastIncomeFromBrutCalls">--</td>
+                    </tr>
+                    <tr>
+                        <td>Income from Net Calls:</td>
+                        <td id="forecastIncomeFromNetCalls">--</td>
+                    </tr>
+    
+                    <!-- Calculation Details -->
+                    <tr>
+                        <th colspan="2">Calculation Details</th>
+                    </tr>
+                    <tr>
+                        <td>Total Time invest in one Prospect:</td>
+                        <td id="detailTimePerProspect">--</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Selected Timeslots</th>
+                    </tr>
+                    <tr>
+                        <td>Timeslots:</td>
+                        <td id="timeslotDisplay">None selected</td>
+                    </tr>
+                    <tr>
+                        <td>Total Hours:</td>
+                        <td><span id="totalHoursTable">0</span> hours</td>
+                    </tr>
+
+                    
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+    
+    <script src="script.js" defer></script> 
+
+</body>
+
+</html>

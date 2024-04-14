@@ -1,0 +1,260 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+.button, #calculateButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: auto; /* Adjusted for general use */
+}
+
+.button:hover, #calculateButton:hover {
+    background-color: #0056b3;
+}
+
+#calculateButton {
+    background-color: #28a745; /* A more "success" green color */
+    width: 100%;
+}
+
+#calculateButton:hover {
+    background-color: #218838;
+}
+
+/* Container & Layout */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+/* Form Styling */
+.form-group {
+    display: flex; /* Use flexbox to align label and input side by side */
+    align-items: center; /* Align items vertically */
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    flex-basis: 40%; /* Assign a fixed width to the label */
+    margin-right: 10px; /* Add some space between the label and input */
+}
+
+.form-group input[type="number"] {
+    flex-grow: 1; /* Input field takes the remaining space */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input[type="number"]:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Calendar Section */
+.week {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.day {
+    background: #f0f0f0;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Timeslot */
+.timeslot {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.timeslot.selected, .timeslot:hover, .timeslot[data-special="true"]:hover {
+    background-color: #3cd33a;
+}
+
+.timeslot[data-special="true"] {
+    background-color: #ffd700;
+    color: #000;
+    border-color: #daa520;
+}
+
+
+/* Calculations */
+
+#calculationDetails p {
+    margin: 10px 0;
+    color: #333;
+    line-height: 1.4;
+}
+
+#calculationDetails .highlight {
+    font-weight: bold;
+    color: #0056b3;
+}
+
+#calculationDetails table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#calculationDetails th,
+#calculationDetails td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Forecast & Result Sections */
+section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    flex: 1 1 45%; /* Flex basis of 45% allows for two columns layout */
+    margin: 10px;
+}
+
+#forecastResults, #results, #calculationDetails {
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    text-align: center;
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#results p, #calculationDetails p, #forecastResults p {
+    margin-bottom: 10px;
+}
+
+
+/* Combined Results Table Styling */
+.combinedResults table {
+    width: 100%; /* Ensure the table uses the full width */
+    border-collapse: collapse; /* Remove space between borders */
+    margin-top: 1rem;
+}
+
+.combinedResults th, .combinedResults td {
+    border: 1px solid #dee2e6; /* Light grey border for each cell */
+    padding: 8px; /* Padding inside each cell for space */
+    text-align: left; /* Align text to the left */
+    font-size: 0.95rem; /* Slightly smaller font size for table content */
+}
+
+.combinedResults th {
+    background-color: #f8f9fa; /* Light background for header */
+    font-weight: bold; /* Make header text bold */
+}
+
+.combinedResults tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping for rows */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .calendar, .prospect-configurator, .configurator, .salesprocess {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .week .day {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .combinedResults table, .combinedResults thead, .combinedResults tbody, .combinedResults th, .combinedResults td, .combinedResults tr {
+        display: block;
+    }
+
+    .combinedResults thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .combinedResults tr {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    .combinedResults td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+    .combinedResults td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        content: attr(data-label);
+    }
+}
+
+/* Segmentation Headers */
+.combinedResults th {
+    background-color: #e9ecef; /* Light grey background */
+    color: #333; /* Dark text for contrast */
+    font-size: 1.1rem; /* Slightly larger font size */
+    padding: 10px; /* Increased padding for more space */
+    text-align: left; /* Align text to the left */
+}
+
+.combinedResults th[colspan="2"] {
+    background-color: #007bff; /* Use a distinct color for section headers */
+    color: #ffffff; /* White text for contrast */
+    font-size: 1.2rem; /* Slightly larger font size for headers */
+}
+
+/* Enhance table row styling */
+.combinedResults tr:not(:first-child) th, .combinedResults td {
+    border-top: 1px solid #dee2e6; /* Add a top border to each row for clearer separation */
+}
