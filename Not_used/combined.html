@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Prix pour Prospection Téléphonique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Simulateur Combiné de Prospection et de Vente</h2>
+
+        <!-- Champs pour le simulateur d'objectifs de vente -->
+        <div class="input-group">
+            <label for="customersToWin">Clients à Gagner (Annuel):</label>
+            <input type="number" id="customersToWin" placeholder="Entrez le nombre de clients à gagner annuellement">
+        </div>
+
+        <div class="input-group">
+            <label for="prospectToCustomerRate">Taux de Conversion Prospect vers Client (%):</label>
+            <input type="number" id="prospectToCustomerRate" value="20">
+        </div>
+
+        <div class="input-group">
+            <label for="callToAppointmentRate">Taux de Conversion Appel vers Rendez-vous (%):</label>
+            <input type="number" id="callToAppointmentRate" value="20">
+        </div>
+
+        <!-- Champs pour le simulateur de coût d'appel -->
+        <div class="input-group">
+            <label for="netCallPrice">Prix d'appel Net (par heure):</label>
+            <input type="number" id="netCallPrice" placeholder="Entrez le prix par heure d'appel net">
+        </div>
+
+        <div class="input-group">
+            <label for="grossCallPrice">Prix d'appel Brute (par heure):</label>
+            <input type="number" id="grossCallPrice" placeholder="Entrez le prix par heure d'appel brut">
+        </div>
+
+        <button onclick="calculateCombinedTargets()">Calculer les Objectifs et le Coût</button>
+
+        <h3>Résultats:</h3>
+        <div id="results"></div>
+    </div>
+
+    <script>
+            // Supposons que vous avez défini cette fonction en fonction de vos besoins spécifiques.
+        function calculateMaxCallsPerHour() {
+            // Mettez votre logique de calcul ici, retournez le nombre maximal d'appels par heure.
+            return 10; // Cette valeur est un exemple.
+        }
+
+
+        function calculateMinimumCalls(customersToWin, prospectToCustomerRate, callToAppointmentRate) {
+            var minimumAppointments = customersToWin / (prospectToCustomerRate / 100);
+            var minimumCalls = minimumAppointments / (callToAppointmentRate / 100);
+            return minimumCalls;
+        }
+
+        function calculateCostPerCall(netCallPrice, grossCallPrice, callsPerHour) {
+            var costPerHourNet = netCallPrice;
+            var costPerHourGross = grossCallPrice;
+            var costPerCallNet = costPerHourNet / callsPerHour;
+            var costPerCallGross = costPerHourGross / callsPerHour;
+            return {
+                net: costPerCallNet,
+                gross: costPerCallGross
+            };
+        }
+
+        function validateInputs() {
+            // Fonction pour valider les entrées de l'utilisateur
+            var customersToWin = document.getElementById('customersToWin').value;
+            var prospectToCustomerRate = document.getElementById('prospectToCustomerRate').value;
+            var callToAppointmentRate = document.getElementById('callToAppointmentRate').value;
+            var netCallPrice = document.getElementById('netCallPrice').value;
+            var grossCallPrice = document.getElementById('grossCallPrice').value;
+
+            if (!customersToWin || !prospectToCustomerRate || !callToAppointmentRate || !netCallPrice || !grossCallPrice) {
+            alert("Veuillez remplir tous les champs.");
+            return false;
+            }
+            return true;
+        }
+
+        function calculateCombinedTargets() {
+            if (!validateInputs()) return;
+
+            var customersToWin = parseFloat(document.getElementById('customersToWin').value);
+            var prospectToCustomerRate = parseFloat(document.getElementById('prospectToCustomerRate').value) / 100;
+            var callToAppointmentRate = parseFloat(document.getElementById('callToAppointmentRate').value) / 100;
+            var netCallPrice = parseFloat(document.getElementById('netCallPrice').value);
+            var grossCallPrice = parseFloat(document.getElementById('grossCallPrice').value);
+            
+            var minimumCalls = calculateMinimumCalls(customersToWin, prospectToCustomerRate, callToAppointmentRate);
+            var callsPerHour = calculateMaxCallsPerHour(); 
+            var costPerCall = calculateCostPerCall(netCallPrice, grossCallPrice, callsPerHour);
+            
+            var totalCostNet = costPerCall.net * minimumCalls;
+            var totalCostGross = costPerCall.gross * minimumCalls;
+
+            var resultsHTML = `
+            <h4>Coût Total pour les Appels</h4>
+            <p>Nombre de clients à gagner annuellement: ${customersToWin}</p>
+            <p>Taux de conversion prospect vers client: ${prospectToCustomerRate * 100}%</p>
+            <p>Taux de conversion appel vers rendez-vous: ${callToAppointmentRate * 100}%</p>
+            <p>Nombre minimal d'appels à effectuer pour atteindre l'objectif: ${minimumCalls.toFixed(0)}</p>
+            <p>Coût total estimé pour les appels nets: ${totalCostNet.toFixed(2)} € (à ${costPerCall.net.toFixed(2)} € par appel)</p>
+            <p>Coût total estimé pour les appels bruts: ${totalCostGross.toFixed(2)} € (à ${costPerCall.gross.toFixed(2)} € par appel)</p>
+            `;
+            document.getElementById('results').innerHTML = resultsHTML;
+        }
+</script>
+
+</body>
+
+</html>

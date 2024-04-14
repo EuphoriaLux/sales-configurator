@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Prix pour Prospection Téléphonique</title>
+    <link rel="stylesheet" href="telemarketing_simulator.css"> <!-- Add this line -->
+    <!-- other head elements -->
+</head>
+
+<body>
+
+
+    <div class="container">
+        <h2>Simulateur de Prix pour Prospection Téléphonique</h2>
+    
+        <form id="priceCalculator" onsubmit="calculatePrice(); return false;">
+            <fieldset>
+                <legend>Configuration de l'objectif</legend>
+                <div class="input-group">
+                    <label for="desiredAppointmentsMonth">Nombre de rendez-vous souhaités par mois:</label>
+                    <input type="number" id="desiredAppointmentsMonth" value="10" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="coldCallCost">Coût par appel réussi (€):</label>
+                    <input type="number" id="coldCallCost" value="0.60" min="0" step="0.01">
+                </div>
+                
+                <div class="input-group">
+                    <label for="bouncedCallCost">Coût par appel rejeté (€):</label>
+                    <input type="number" id="bouncedCallCost" value="0.30" min="0" step="0.01">
+                </div>
+                
+                <div class="input-group">
+                    <label for="maxCallsPerDay">Nombre maximum d'appels par jour:</label>
+                    <input type="number" id="maxCallsPerDay" value="100" min="1">
+                </div>
+                
+                
+            </fieldset>
+    
+            <button type="submit">Calculer le Coût</button>
+        </form>
+    
+        <h3>Résultats:</h3>
+        <div id="result"></div>
+    </div>
+    
+
+    <script>
+        function calculateMaxCallsPerHour() {
+            // Ensure all elements exist
+            var callDurationEl = document.getElementById('callDuration');
+            var crmEntryDurationEl = document.getElementById('crmEntryDuration'); // Ensure this element exists in HTML
+            var identifyTargetsDurationEl = document.getElementById('identifyTargetsDuration');
+            var writingEmailDurationEl = document.getElementById('writingEmailDuration');
+
+            if (!callDurationEl || !crmEntryDurationEl || !identifyTargetsDurationEl || !writingEmailDurationEl) {
+                console.error("Some form elements are missing.");
+                return 0;
+            }
+
+            var callDuration = parseFloat(callDurationEl.value);
+            var crmEntryDuration = parseFloat(crmEntryDurationEl.value); // This value needs to come from an existing form element
+            var identifyTargetsDuration = parseFloat(identifyTargetsDurationEl.value);
+            var writingEmailDuration = parseFloat(writingEmailDurationEl.value);
+
+            var totalTimePerCycle = callDuration + crmEntryDuration + identifyTargetsDuration + writingEmailDuration;
+            var totalTimePerCycleInHours = totalTimePerCycle / 60;
+            var maxCallsPerHour = 1 / totalTimePerCycleInHours;
+
+            return maxCallsPerHour;
+        }
+
+        function calculateCosts() {
+            // Constants
+            const workingDaysPerMonth = 20; // Assuming 20 working days in a month
+
+            // Inputs
+            var desiredAppointmentsMonth = parseFloat(document.getElementById('desiredAppointmentsMonth').value);
+            var coldCallCost = parseFloat(document.getElementById('coldCallCost').value);
+            var bouncedCallCost = parseFloat(document.getElementById('bouncedCallCost').value);
+            var maxCallsPerDay = parseFloat(document.getElementById('maxCallsPerDay').value);
+            var conversionRate = parseFloat(document.getElementById('conversionRate').value);
+            var bounceRate = parseFloat(document.getElementById('bounceRate').value) / 100; // Convert percentage to decimal
+
+            // Calculations
+            var dailyAppointmentGoal = desiredAppointmentsMonth / workingDaysPerMonth;
+            var totalCallsNeededPerAppointment = conversionRate / (1 - bounceRate);
+            var dailyCallsNeeded = dailyAppointmentGoal * totalCallsNeededPerAppointment;
+
+            if (dailyCallsNeeded > maxCallsPerDay) {
+                alert("Le nombre d'appels nécessaires par jour pour atteindre l'objectif dépasse le maximum autorisé. Veuillez ajuster vos objectifs ou le maximum d'appels par jour.");
+                return;
+            }
+
+            var successfulCallsPerDay = dailyCallsNeeded * (1 - bounceRate);
+            var bouncedCallsPerDay = dailyCallsNeeded * bounceRate;
+
+            // Cost calculations
+            var dailyCost = (successfulCallsPerDay * coldCallCost) + (bouncedCallsPerDay * bouncedCallCost);
+            var monthlyCost = dailyCost * workingDaysPerMonth;
+
+            // Update results
+            var resultText = `
+                <h4>Simulation des Coûts</h4>
+                <p>Coût quotidien: ${dailyCost.toFixed(2)} €</p>
+                <p>Coût mensuel: ${monthlyCost.toFixed(2)} €</p>
+                <p>Appels réussis par jour: ${successfulCallsPerDay.toFixed(2)}</p>
+                <p>Appels rejetés par jour: ${bouncedCallsPerDay.toFixed(2)}</p>
+            `;
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
